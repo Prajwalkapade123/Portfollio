@@ -10,13 +10,29 @@ const Contact = () => {
         email: "",
         message: "",
     });
+    const [status, setStatus] = useState({ loading: false, success: null });
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const validateForm = () => {
+        if (!/^\d+$/.test(formData.mobile)) {
+            alert("Mobile number should only contain digits.");
+            return false;
+        }
+        if (formData.mobile.length < 10) {
+            alert("Mobile number should be at least 10 digits.");
+            return false;
+        }
+        return true;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!validateForm()) return;
+
+        setStatus({ loading: true, success: null });
         try {
             const response = await fetch(`${API_BASE_URL}/api/contact`, {
                 method: 'POST',
@@ -24,13 +40,16 @@ const Contact = () => {
                 body: JSON.stringify(formData)
             });
             if (response.ok) {
-                alert("Message sent successfully!");
+                setStatus({ loading: false, success: true });
                 setFormData({ name: "", mobile: "", email: "", message: "" });
+                setTimeout(() => setStatus(prev => ({ ...prev, success: null })), 5000);
             } else {
+                setStatus({ loading: false, success: false });
                 alert("Failed to send message. Please try again.");
             }
         } catch (error) {
             console.error("Error submitting form:", error);
+            setStatus({ loading: false, success: false });
             alert("Something went wrong. Please try again later.");
         }
     };
@@ -152,11 +171,15 @@ const Contact = () => {
 
                             <button
                                 type="submit"
-                                className="w-full px-8 py-3.5 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold transition-all flex items-center justify-center gap-2"
+                                disabled={status.loading}
+                                className={`w-full px-8 py-3.5 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold transition-all flex items-center justify-center gap-2 ${status.loading ? 'opacity-70 cursor-not-allowed' : ''}`}
                             >
-                                Send Message
-                                <Send size={18} />
+                                {status.loading ? "Sending..." : "Send Message"}
+                                {!status.loading && <Send size={18} />}
                             </button>
+                            {status.success === true && (
+                                <p className="text-green-400 text-sm text-center mt-2">Message sent successfully!</p>
+                            )}
                         </form>
                     </motion.div>
 

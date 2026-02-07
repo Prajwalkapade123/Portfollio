@@ -28,9 +28,11 @@ const projectsData = [
 ];
 
 const Projects = () => {
-    const [projects, setProjects] = React.useState(projectsData); // Initialize with fallback
+    const [projects, setProjects] = React.useState(projectsData);
+    const [loading, setLoading] = React.useState(true);
 
     React.useEffect(() => {
+        setLoading(true);
         fetch(`${API_BASE_URL}/api/projects`)
             .then(res => {
                 if (res.ok) return res.json();
@@ -39,7 +41,11 @@ const Projects = () => {
             .then(data => {
                 if (data && data.length > 0) setProjects(data);
             })
-            .catch(err => console.log("Using local data (Backend not reachable)", err));
+            .catch(err => {
+                console.log("Using local data (Backend not reachable)", err);
+                setProjects(projectsData);
+            })
+            .finally(() => setLoading(false));
     }, []);
 
     return (

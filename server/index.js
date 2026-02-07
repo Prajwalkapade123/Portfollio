@@ -5,14 +5,24 @@ const dotenv = require("dotenv");
 const nodemailer = require("nodemailer");
 const path = require("path");
 
+const compression = require("compression");
+const helmet = require("helmet");
+
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
+app.use(helmet({
+    contentSecurityPolicy: false, // Disable CSP for simplicity in this portfolio context if needed, or configure it properly
+}));
+app.use(compression());
 app.use(cors());
 app.use(express.json());
+
+// Serving Static Files with Caching
+const cachePeriod = 60 * 60 * 24 * 30; // 30 days
 
 // Serve Static Files from Frontend Dist
 let clientDistPath = path.join(__dirname, "../client/dist");
@@ -20,7 +30,10 @@ let clientDistPath = path.join(__dirname, "../client/dist");
 if (!require('fs').existsSync(clientDistPath)) {
     clientDistPath = path.join(__dirname, "../../client/dist");
 }
-app.use(express.static(clientDistPath));
+app.use(express.static(clientDistPath, {
+    maxAge: cachePeriod * 1000,
+    immutable: true
+}));
 
 // Models
 const Message = require("./models/Message");
