@@ -22,9 +22,6 @@ function App() {
             <Route path="/contact" element={<Contact />} />
           </Routes>
         </main>
-        <About />
-        <Projects />
-        <Contact />
         <Footer />
       </div>
     </Router>
