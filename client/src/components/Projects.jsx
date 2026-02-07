@@ -1,6 +1,7 @@
 
 import React from "react";
 import ProjectCard from "./ProjectCard";
+import API_BASE_URL from "../api/api";
 
 const projectsData = [
     {
@@ -30,7 +31,7 @@ const Projects = () => {
     const [projects, setProjects] = React.useState(projectsData); // Initialize with fallback
 
     React.useEffect(() => {
-        fetch('/api/projects')
+        fetch(`${API_BASE_URL}/api/projects`)
             .then(res => {
                 if (res.ok) return res.json();
                 throw new Error('Network response was not ok');

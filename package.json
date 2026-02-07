@@ -1,4 +1,10 @@
 {
+  "name": "pk-portfolio",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "npm install && cd client && npm install && npm run build && cd ../server && npm install",
+    "start": "cd server && npm start"
+  },
   "devDependencies": {
     "autoprefixer": "^10.4.24",
     "postcss": "^8.5.6",

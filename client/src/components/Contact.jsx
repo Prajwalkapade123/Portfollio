@@ -1,7 +1,7 @@
 
-import { motion } from "framer-motion";
-import { Mail, MapPin, Phone, Send } from "lucide-react";
+import { motion } from "framer-motion"; import { Mail, MapPin, Phone, Send } from "lucide-react";
 import { useState } from "react";
+import API_BASE_URL from "../api/api";
 
 const Contact = () => {
     const [formData, setFormData] = useState({
@@ -18,7 +18,7 @@ const Contact = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('/api/contact', {
+            const response = await fetch(`${API_BASE_URL}/api/contact`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
