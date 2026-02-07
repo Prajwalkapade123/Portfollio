@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const nodemailer = require("nodemailer");
+const path = require("path");
 
 dotenv.config();
 
@@ -12,6 +13,10 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Serve Static Files from Frontend Dist
+const clientDistPath = path.join(__dirname, "../client/dist");
+app.use(express.static(clientDistPath));
 
 // Models
 const Message = require("./models/Message");
@@ -42,11 +47,6 @@ const sampleProjects = [
         result: "Delivered a seamless ordering experience for users and an efficient dashboard for restaurant owners to manage orders."
     }
 ];
-
-// Root
-app.get("/", (req, res) => {
-    res.send("API is running...");
-});
 
 // ---------------- EMAIL CONFIG ----------------
 const transporter = nodemailer.createTransport({
@@ -144,8 +144,16 @@ mongoose
         console.log("⚠️  Server will continue without database. API calls may fail.");
     });
 
-// Start server regardless of MongoDB connection status
+// ---------------- STATIC FILE SERVING ----------------
+
+// Client-side routing: redirect all unknown routes to frontend index.html
+app.use((req, res) => {
+    res.sendFile(path.join(clientDistPath, "index.html"));
+});
+
+// Start server
 app.listen(PORT, () => {
     console.log(`\n🚀 Server running on http://localhost:${PORT}`);
     console.log(`📡 API endpoints available at http://localhost:${PORT}/api`);
+    console.log(`🌐 Serving static files from: ${clientDistPath}`);
 });
