@@ -15,7 +15,11 @@ app.use(cors());
 app.use(express.json());
 
 // Serve Static Files from Frontend Dist
-const clientDistPath = path.join(__dirname, "../client/dist");
+let clientDistPath = path.join(__dirname, "../client/dist");
+// Fallback check for different deployment structures
+if (!require('fs').existsSync(clientDistPath)) {
+    clientDistPath = path.join(__dirname, "../../client/dist");
+}
 app.use(express.static(clientDistPath));
 
 // Models
