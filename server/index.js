@@ -20,17 +20,25 @@ app.use(helmet({
 app.use(compression());
 const allowedOrigins = [
     "https://portfollio-frontend-4v8b.onrender.com",
+    "https://portfollio-liard-one.vercel.app", // Added Vercel production origin
     "http://localhost:5173",
     "http://localhost:5001",
     "http://localhost:5000"
 ];
+
+// Add custom origins from environment variables if provided
+if (process.env.ALLOWED_ORIGINS) {
+    const envOrigins = process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim());
+    allowedOrigins.push(...envOrigins);
+}
 
 app.use(cors({
     origin: function (origin, callback) {
         // allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
         if (allowedOrigins.indexOf(origin) === -1) {
-            var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            var msg = 'The CORS policy for this site does not allow access from the specified Origin: ' + origin;
+            console.error(msg);
             return callback(new Error(msg), false);
         }
         return callback(null, true);
@@ -120,31 +128,24 @@ app.post("/api/contact", async (req, res) => {
             inMemoryMessages.push({ name, mobile, email, message, date: new Date() });
         }
 
-        // Send Email
-        try {
-            await transporter.sendMail({
-                from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
-                to: process.env.EMAIL_USER,
-                replyTo: email,
-                subject: `New Message from ${name}`,
-                text: `
-Name: ${name}
-Mobile: ${mobile}
-Email: ${email}
-
-Message:
-${message}
-      `,
-            });
+        // Send Email (ASYNCHRONOUSLY - Don't await)
+        transporter.sendMail({
+            from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
+            to: process.env.EMAIL_USER,
+            replyTo: email,
+            subject: `New Message from ${name}`,
+            text: `Name: ${name}\nMobile: ${mobile}\nEmail: ${email}\n\nMessage:\n${message}`,
+        }).then(() => {
             console.log("✅ Email sent successfully");
-        } catch (emailError) {
-            console.error("⚠️  Email failed:", emailError.message);
-        }
+        }).catch((err) => {
+            console.error("⚠️  Email failed:", err.message);
+        });
 
+        // Send success response immediately
         res.status(201).json({ message: "Message sent successfully!" });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Failed to send message" });
+        console.error("Contact Route Error:", error);
+        res.status(500).json({ message: "Failed to process message" });
     }
 });
 
