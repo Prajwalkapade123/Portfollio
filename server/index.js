@@ -9,6 +9,10 @@ const compression = require("compression");
 const helmet = require("helmet");
 
 dotenv.config();
+// Fallback to root .env if not found in server folder
+if (!process.env.MONGO_URI) {
+    dotenv.config({ path: path.join(__dirname, '../.env') });
+}
 
 const app = express();
 const PORT = process.env.PORT || 5000;
