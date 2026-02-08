@@ -20,8 +20,11 @@
   --color-secondary: #ec4899;
 }
 
+html,
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: hidden;
+  width: 100%;
 }

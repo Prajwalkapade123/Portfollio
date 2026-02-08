@@ -57,7 +57,7 @@ const Contact = () => {
     return (
         <section className="py-20 bg-[#0a0a0a] text-white" id="contact">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 lg:gap-20">
 
                     {/* Contact Info */}
                     <motion.div
@@ -102,7 +102,7 @@ const Contact = () => {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
-                        className="bg-white/5 border border-white/10 rounded-2xl p-8"
+                        className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 shadow-xl"
                     >
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div>

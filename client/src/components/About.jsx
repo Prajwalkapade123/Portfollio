@@ -7,7 +7,7 @@ const About = () => {
     return (
         <section className="py-20 bg-[#0a0a0a] text-white" id="about">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 items-center">
 
                     {/* Image / Visual Placeholder */}
                     <motion.div
@@ -15,13 +15,13 @@ const About = () => {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.5 }}
-                        className="relative"
+                        className="relative max-w-sm mx-auto md:max-w-none"
                     >
-                        <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-tr from-blue-600 to-purple-600 relative z-10 flex items-center justify-center">
+                        <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-tr from-blue-600 to-purple-600 relative z-10 flex items-center justify-center shadow-2xl">
                             {/* Replace with actual image */}
                             <img src={assets.photo} alt="Profile_image" className="w-full h-full object-cover" />
                         </div>
-                        <div className="absolute top-4 left-4 w-full h-full border-2 border-blue-500/30 rounded-2xl z-0 translate-x-4 translate-y-4"></div>
+                        <div className="absolute top-3 left-3 md:top-4 md:left-4 w-full h-full border-2 border-blue-500/30 rounded-2xl z-0 translate-x-3 translate-y-3 md:translate-x-4 md:translate-y-4"></div>
                     </motion.div>
 
                     {/* Content */}

@@ -18,7 +18,24 @@ app.use(helmet({
     contentSecurityPolicy: false, // Disable CSP for simplicity in this portfolio context if needed, or configure it properly
 }));
 app.use(compression());
-app.use(cors());
+const allowedOrigins = [
+    "https://portfollio-frontend-4v8b.onrender.com",
+    "http://localhost:5173",
+    "http://localhost:5001",
+    "http://localhost:5000"
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        // allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    }
+}));
 app.use(express.json());
 
 // Serving Static Files with Caching
@@ -29,6 +46,9 @@ let clientDistPath = path.join(__dirname, "../client/dist");
 // Fallback check for different deployment structures
 if (!require('fs').existsSync(clientDistPath)) {
     clientDistPath = path.join(__dirname, "../../client/dist");
+}
+if (!require('fs').existsSync(clientDistPath)) {
+    clientDistPath = path.join(__dirname, "client/dist"); // For cases where server is run from root
 }
 app.use(express.static(clientDistPath, {
     maxAge: cachePeriod * 1000,

@@ -9,11 +9,11 @@ const ProjectCard = ({ project, index }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.3, delay: index * 0.05 }}
-            className="bg-[#111] border border-white/10 rounded-2xl overflow-hidden hover:border-blue-500/30 hover:shadow-[0_0_20px_rgba(59,130,246,0.1)] transition-all group"
+            className="bg-[#111] border border-white/10 rounded-2xl overflow-hidden hover:border-blue-500/30 hover:shadow-[0_0_20px_rgba(59,130,246,0.1)] transition-all group h-full"
         >
-            <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">
+            <div className="p-5 sm:p-6 flex flex-col h-full">
+                <div className="flex justify-between items-start mb-4 gap-4">
+                    <h3 className="text-xl sm:text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">
                         {project.title}
                     </h3>
                     <div className="flex gap-3">

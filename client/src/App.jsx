@@ -1,10 +1,7 @@
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
-
 import Footer from "./components/Footer";
-
 import About from "./pages/About";
 import Projects from "./pages/Projects";
 import Contact from "./pages/Contact";
@@ -12,7 +9,7 @@ import Contact from "./pages/Contact";
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-blue-500/30 flex flex-col">
+      <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-blue-500/30 flex flex-col overflow-x-hidden">
         <Navbar />
         <main className="flex-grow">
           <Routes>
